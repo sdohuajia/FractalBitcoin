@@ -118,11 +118,8 @@ function create_wallet() {
 function view_private_key() {
     echo "查看私钥..."
     
-    # 进入 fractald 目录并查看私钥
-    cd /root/fractald-0.1.6-x86_64-linux-gnu/bin && ./bitcoin-wallet -wallet=/root/.bitcoin/wallets/wallet/wallet.dat -dumpfile=/root/.bitcoin/wallets/wallet/MyPK.dat dump
-    
-    # 使用 awk 解析私钥
-    cd && awk -F 'checksum,' '/checksum/ {print "Cüzdan Private Keyiniz:" $2}' .bitcoin/wallets/wallet/MyPK.dat
+    # 进入 fractald 目录并查看私钥并使用 awk 解析私钥
+    cd /root/fractald-1.0.6-x86_64-linux-gnu/bin && ./bitcoin-wallet -wallet=/root/.bitcoin/wallets/wallet/wallet.dat -dumpfile=/root/.bitcoin/wallets/wallet/MyPK.dat dump && cd && awk -F 'checksum,' '/checksum/ {print "Cüzdan Private Keyiniz:" $2}' .bitcoin/wallets/wallet/MyPK.dat
 
     # 提示用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
