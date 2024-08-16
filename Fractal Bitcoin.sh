@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# 检查是否以root用户运行脚本
-if [ "$(id -u)" != "0" ]; then
-    echo "此脚本需要以root用户权限运行。"
-    echo "请尝试使用 'sudo -i' 命令切换到root用户，然后再次运行此脚本。"
-    exit 1
-fi
-
 # 主菜单函数
 function main_menu() {
     while true; do
@@ -18,13 +11,17 @@ function main_menu() {
         echo "请选择要执行的操作:"
         echo "1) 安装节点"
         echo "2) 查看服务日志"
-        echo "3) 退出"
-        echo -n "请输入选项 [1-3]: "
+        echo "3) 创建钱包"
+        echo "4) 查看私钥"
+        echo "5) 退出"
+        echo -n "请输入选项 [1-5]: "
         read choice
         case $choice in
             1) install_node ;;
             2) view_logs ;;
-            3) exit 0 ;;
+            3) create_wallet ;;
+            4) view_private_key ;;
+            5) exit 0 ;;
             *) echo "无效选项，请重新选择。" ;;
         esac
     done
@@ -104,6 +101,29 @@ function view_logs() {
     echo "查看 fractald 服务日志..."
     sudo journalctl -u fractald -fo cat
     
+    # 提示用户按任意键返回主菜单
+    read -p "按任意键返回主菜单..."
+}
+
+# 创建钱包函数
+function create_wallet() {
+    echo "创建钱包..."
+    cd /root/fractald-0.1.7-x86_64-linux-gnu/bin && ./bitcoin-wallet -wallet=wallet -legacy create
+    
+    # 提示用户按任意键返回主菜单
+    read -p "按任意键返回主菜单..."
+}
+
+# 查看私钥函数
+function view_private_key() {
+    echo "查看私钥..."
+    
+    # 进入 fractald 目录并查看私钥
+    cd /root/fractald-0.1.6-x86_64-linux-gnu/bin && ./bitcoin-wallet -wallet=/root/.bitcoin/wallets/wallet/wallet.dat -dumpfile=/root/.bitcoin/wallets/wallet/MyPK.dat dump
+    
+    # 使用 awk 解析私钥
+    cd && awk -F 'checksum,' '/checksum/ {print "Cüzdan Private Keyiniz:" $2}' .bitcoin/wallets/wallet/MyPK.dat
+
     # 提示用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
 }
