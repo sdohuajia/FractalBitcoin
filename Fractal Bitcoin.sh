@@ -14,7 +14,7 @@ function main_menu() {
         echo "节点社区 Discord 社群: https://discord.gg/GbMV5EcNWF"
         echo "退出脚本，请按键盘ctrl c退出即可"
         echo "请选择要执行的操作:"
-        echo "1) 安装节点（0.1.7版本）"
+        echo "1) 安装节点（0.1.8版本）"
         echo "2) 查看服务日志"
         echo "3) 创建钱包"
         echo "4) 查看私钥"
