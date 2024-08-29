@@ -18,7 +18,7 @@ function main_menu() {
         echo "2) 查看服务日志"
         echo "3) 创建钱包"
         echo "4) 查看私钥"
-        echo "5) 更新脚本"
+        echo "5) 更新脚本（旧0.1.7更新）"
         echo "6) 退出"
         echo -n "请输入选项 [1-6]: "
         read choice
