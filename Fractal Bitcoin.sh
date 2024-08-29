@@ -18,15 +18,17 @@ function main_menu() {
         echo "2) 查看服务日志"
         echo "3) 创建钱包"
         echo "4) 查看私钥"
-        echo "5) 退出"
-        echo -n "请输入选项 [1-5]: "
+        echo "5) 更新脚本"
+        echo "6) 退出"
+        echo -n "请输入选项 [1-6]: "
         read choice
         case $choice in
             1) install_node ;;
             2) view_logs ;;
             3) create_wallet ;;
             4) view_private_key ;;
-            5) exit 0 ;;
+            5) update_script ;;
+            6) exit 0 ;;
             *) echo "无效选项，请重新选择。" ;;
         esac
     done
@@ -132,6 +134,64 @@ function view_private_key() {
     # 解析并显示私钥
     awk -F 'checksum,' '/checksum/ {print "钱包的私钥是:" $2}' /root/.bitcoin/wallets/wallet/MyPK.dat
     
+    # 提示用户按任意键返回主菜单
+    read -p "按任意键返回主菜单..."
+}
+
+# 更新脚本函数
+function update_script() {
+    echo "开始更新脚本..."
+
+    # 备份 data 目录
+    echo "备份 data 目录..."
+    sudo cp -r /root/fractald-0.1.7-x86_64-linux-gnu/data /root/fractal-data-backup
+
+    # 下载新版本 fractald 库
+    echo "下载新版本 fractald 库..."
+    wget https://github.com/fractal-bitcoin/fractald-release/releases/download/v0.1.8/fractald-0.1.8-x86_64-linux-gnu.tar.gz
+
+    # 提取新版本 fractald 库
+    echo "提取新版本 fractald 库..."
+    tar -zxvf fractald-0.1.8-x86_64-linux-gnu.tar.gz
+
+    # 进入新版本 fractald 目录
+    echo "进入新版本 fractald 目录..."
+    cd fractald-0.1.8-x86_64-linux-gnu
+
+    # 恢复备份的 data 文件
+    echo "恢复备份的 data 文件..."
+    cp -r /root/fractal-data-backup /root/fractald-0.1.8-x86_64-linux-gnu/
+
+    # 更新 systemd 服务文件（如果有变化）
+    echo "更新 systemd 服务文件..."
+    sudo tee /etc/systemd/system/fractald.service > /dev/null <<EOF
+[Unit]
+Description=Fractal Node
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root/fractald-0.1.8-x86_64-linux-gnu
+ExecStart=/root/fractald-0.1.8-x86_64-linux-gnu/bin/bitcoind -datadir=/root/fractald-0.1.8-x86_64-linux-gnu/data/ -maxtipage=504576000
+Restart=always
+RestartSec=3
+LimitNOFILE=infinity
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    # 重新加载 systemd 管理器配置
+    echo "重新加载 systemd 管理器配置..."
+    sudo systemctl daemon-reload
+
+    # 启动并使服务在启动时自动启动
+    echo "启用并启动 fractald 服务..."
+    sudo systemctl enable fractald
+    sudo systemctl start fractald
+
+    echo "脚本更新完成。"
+
     # 提示用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
 }
