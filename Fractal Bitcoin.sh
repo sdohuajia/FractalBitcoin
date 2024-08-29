@@ -47,21 +47,26 @@ function install_node() {
 
     echo "系统更新、软件包升级和安装完成。"
 
-    # 下载 fractald 库
-    echo "下载 fractald 库..."
-    wget https://github.com/fractal-bitcoin/fractald-release/releases/download/v0.1.7/fractald-0.1.7-x86_64-linux-gnu.tar.gz
+    # 获取最新版本的 fractald 库下载链接
+    echo "获取最新版本的 fractald 库下载链接..."
+    LATEST_URL=$(curl -s https://github.com/fractal-bitcoin/fractald-release/releases/ | grep -oP 'href="\K[^"]*linux-gnu\.tar\.gz' | head -n 1)
+    FULL_URL="https://github.com$LATEST_URL"
+
+    echo "下载 fractald 库: $FULL_URL"
+    wget "$FULL_URL" -O fractald-latest.tar.gz
 
     # 提取 fractald 库
     echo "提取 fractald 库..."
-    tar -zxvf fractald-0.1.7-x86_64-linux-gnu.tar.gz
+    mkdir -p fractald
+    tar -zxvf fractald-latest.tar.gz -C fractald --strip-components=1
 
     # 进入 fractald 目录
     echo "进入 fractald 目录..."
-    cd fractald-0.1.7-x86_64-linux-gnu
+    cd fractald
 
     # 创建 data 目录
     echo "创建 data 目录..."
-    mkdir data
+    mkdir -p data
 
     # 复制配置文件到 data 目录
     echo "复制配置文件到 data 目录..."
@@ -76,8 +81,8 @@ After=network.target
 
 [Service]
 User=root
-WorkingDirectory=/root/fractald-0.1.7-x86_64-linux-gnu
-ExecStart=/root/fractald-0.1.7-x86_64-linux-gnu/bin/bitcoind -datadir=/root/fractald-0.1.7-x86_64-linux-gnu/data/ -maxtipage=504576000
+WorkingDirectory=/root/fractald
+ExecStart=/root/fractald/bin/bitcoind -datadir=/root/fractald/data/ -maxtipage=504576000
 Restart=always
 RestartSec=3
 LimitNOFILE=infinity
