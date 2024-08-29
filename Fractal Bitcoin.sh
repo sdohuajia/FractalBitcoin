@@ -51,7 +51,7 @@ function install_node() {
 
     # 下载 fractald 库
     echo "下载 fractald 库..."
-    wget https://github.com/fractal-bitcoin/fractald-release/releases/download/v0.1.7/fractald-0.1.8-x86_64-linux-gnu.tar.gz
+    wget https://github.com/fractal-bitcoin/fractald-release/releases/download/v0.1.8/fractald-0.1.8-x86_64-linux-gnu.tar.gz
 
     # 提取 fractald 库
     echo "提取 fractald 库..."
