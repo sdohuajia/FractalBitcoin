@@ -185,6 +185,10 @@ EOF
     echo "重新加载 systemd 管理器配置..."
     sudo systemctl daemon-reload
 
+    # 重启启动服务
+    echo "重启 fractald 服务..."
+    sudo systemctl restart fractald
+    
     # 启动并使服务在启动时自动启动
     echo "启用并启动 fractald 服务..."
     sudo systemctl enable fractald
