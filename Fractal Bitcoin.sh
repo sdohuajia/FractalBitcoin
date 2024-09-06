@@ -130,10 +130,10 @@ function backup_private_key() {
     # 确保备份目录存在
     mkdir -p "$BACKUP_DIR" || { echo "创建备份目录失败"; return 1; }
 
-    # 备份私钥
-    cp /root/.bitcoin/wallets/wallet/MyPK.dat "$BACKUP_DIR/MyPK_backup.dat" || { echo "备份私钥失败"; return 1; }
+    # 备份整个 wallet 目录
+    cp -r /root/.bitcoin/wallets/wallet "$BACKUP_DIR/wallet_backup" || { echo "备份私钥失败"; return 1; }
 
-    echo "私钥备份完成，备份文件位置: $BACKUP_DIR/MyPK_backup.dat"
+    echo "私钥备份完成，备份文件位置: $BACKUP_DIR/wallet_backup"
 
     # 提示用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
