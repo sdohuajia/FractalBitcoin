@@ -19,8 +19,7 @@ function main_menu() {
         echo "3) 创建钱包"
         echo "4) 查看私钥"
         echo "5) 更新脚本（旧0.1.7更新）"
-        echo "6) 备份私钥"
-        echo "7) 退出"
+        echo "6) 退出"
         echo -n "请输入选项 [1-6]: "
         read choice
         case $choice in
@@ -29,8 +28,7 @@ function main_menu() {
             3) create_wallet ;;
             4) view_private_key ;;
             5) update_script ;;
-            6) backup_private_key ;;
-            7) exit 0 ;;
+            6) exit 0 ;;
             *) echo "无效选项，请重新选择。" ;;
         esac
     done
@@ -121,36 +119,6 @@ function create_wallet() {
     
     # 提示用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
-}
-
-# 设置备份目录的环境变量（确保在运行脚本之前已经正确设置）
-BACKUP_DIR="${BACKUP_DIR:-/path/to/backup/directory}"
-
-# 备份私钥函数
-function backup_private_key() {
-    echo "备份私钥..."
-
-    # 打印备份目录信息
-    echo "备份目录: $BACKUP_DIR"
-
-    # 确保备份目录存在
-    mkdir -p "$BACKUP_DIR" || { echo "创建备份目录失败"; return 1; }
-
-    # 备份整个 wallet 目录
-    echo "开始备份..."
-    cp -r /root/.bitcoin/wallets/wallet "$BACKUP_DIR/wallet_backup" 2> error.log
-    if [ $? -ne 0 ]; then
-        echo "备份私钥失败"
-        echo "错误信息如下："
-        cat error.log
-        return 1
-    fi
-
-    echo "私钥备份完成，备份文件位置: $BACKUP_DIR/wallet_backup"
-
-    # 提示用户按任意键返回主菜单
-    read -p "按任意键返回主菜单..."
-    sleep 30
 }
 
 # 查看私钥函数
