@@ -123,21 +123,25 @@ function create_wallet() {
     read -p "按任意键返回主菜单..."
 }
 
+# 设置备份目录的环境变量（确保在运行脚本之前已经正确设置）
+BACKUP_DIR="${BACKUP_DIR:-/path/to/backup/directory}"
+
 # 备份私钥函数
 function backup_private_key() {
     echo "备份私钥..."
 
-    # 确保备份目录存在
-    mkdir -p "$BACKUP_DIR" || { echo "创建备份目录失败"; return 1; }
-
     # 打印备份目录信息
     echo "备份目录: $BACKUP_DIR"
 
+    # 确保备份目录存在
+    mkdir -p "$BACKUP_DIR" || { echo "创建备份目录失败"; return 1; }
+
     # 备份整个 wallet 目录
     echo "开始备份..."
-    cp -r /root/.bitcoin/wallets/wallet "$BACKUP_DIR/wallet_backup" 2>> error.log
+    cp -r /root/.bitcoin/wallets/wallet "$BACKUP_DIR/wallet_backup" 2> error.log
     if [ $? -ne 0 ]; then
         echo "备份私钥失败"
+        echo "错误信息如下："
         cat error.log
         return 1
     fi
