@@ -137,6 +137,7 @@ function backup_private_key() {
 
     # 提示用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
+    sleep 30
 }
 
 # 查看私钥函数
