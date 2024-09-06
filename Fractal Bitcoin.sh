@@ -19,7 +19,8 @@ function main_menu() {
         echo "3) 创建钱包"
         echo "4) 查看私钥"
         echo "5) 更新脚本（旧0.1.7更新）"
-        echo "6) 退出"
+        echo "6) 备份私钥"
+        echo "7) 退出"
         echo -n "请输入选项 [1-6]: "
         read choice
         case $choice in
@@ -28,7 +29,8 @@ function main_menu() {
             3) create_wallet ;;
             4) view_private_key ;;
             5) update_script ;;
-            6) exit 0 ;;
+            6) backup_private_key ;;
+            7) exit 0 ;;
             *) echo "无效选项，请重新选择。" ;;
         esac
     done
@@ -117,6 +119,22 @@ function create_wallet() {
     echo "创建钱包..."
     cd /root/fractald-0.1.8-x86_64-linux-gnu/bin && ./bitcoin-wallet -wallet=wallet -legacy create
     
+    # 提示用户按任意键返回主菜单
+    read -p "按任意键返回主菜单..."
+}
+
+# 备份私钥函数
+function backup_private_key() {
+    echo "备份私钥..."
+
+    # 确保备份目录存在
+    mkdir -p "$BACKUP_DIR" || { echo "创建备份目录失败"; return 1; }
+
+    # 备份私钥
+    cp /root/.bitcoin/wallets/wallet/MyPK.dat "$BACKUP_DIR/MyPK_backup.dat" || { echo "备份私钥失败"; return 1; }
+
+    echo "私钥备份完成，备份文件位置: $BACKUP_DIR/MyPK_backup.dat"
+
     # 提示用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
 }
