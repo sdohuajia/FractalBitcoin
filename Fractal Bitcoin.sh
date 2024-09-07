@@ -142,40 +142,32 @@ function view_private_key() {
 function update_script() {
     echo "开始更新脚本..."
 
-    # 备份 .bitcoin 目录
-    echo "备份 .bitcoin 目录..."
-    sudo cp -r /root/.bitcoin /root/bitcoin-backup
-
-    # 备份旧版本的 data 目录
-    echo "备份旧版本的 data 目录..."
-    sudo cp -r /root/fractald-0.1.8-x86_64-linux-gnu/data /root/fractald-0.1.8-x86_64-linux-gnu/data-backup
-
     # 删除旧版本 fractald 目录
     echo "删除旧版本 fractald 目录..."
     sudo rm -rf /root/fractald-0.1.8-x86_64-linux-gnu
 
-    # 下载新版本 fractald 库
-    echo "下载新版本 fractald 库..."
+    # 下载 fractald 库
+    echo "下载 fractald 库..."
     wget https://github.com/fractal-bitcoin/fractald-release/releases/download/v0.2.0/fractald-0.2.0-x86_64-linux-gnu.tar.gz
 
-    # 提取新版本 fractald 库
-    echo "提取新版本 fractald 库..."
+    # 提取 fractald 库
+    echo "提取 fractald 库..."
     tar -zxvf fractald-0.2.0-x86_64-linux-gnu.tar.gz
 
-    # 进入新版本 fractald 目录
-    echo "进入新版本 fractald 目录..."
+    # 进入 fractald 目录
+    echo "进入 fractald 目录..."
     cd fractald-0.2.0-x86_64-linux-gnu
 
-    # 恢复备份的 .bitcoin 文件夹
-    echo "恢复备份的 .bitcoin 文件夹..."
-    sudo cp -r /root/bitcoin-backup /root/.bitcoin
+    # 创建 data 目录
+    echo "创建 data 目录..."
+    mkdir data
 
-    # 恢复旧版本的 data 目录
-    echo "恢复旧版本的 data 目录..."
-    sudo cp -r /root/fractald-0.1.8-x86_64-linux-gnu/data-backup /root/fractald-0.2.0-x86_64-linux-gnu/data
+    # 复制配置文件到 data 目录
+    echo "复制配置文件到 data 目录..."
+    cp ./bitcoin.conf ./data
 
-    # 更新 systemd 服务文件（如果有变化）
-    echo "更新 systemd 服务文件..."
+    # 创建 systemd 服务文件
+    echo "创建 systemd 服务文件..."
     sudo tee /etc/systemd/system/fractald.service > /dev/null <<EOF
 [Unit]
 Description=Fractal Node
@@ -197,17 +189,13 @@ EOF
     echo "重新加载 systemd 管理器配置..."
     sudo systemctl daemon-reload
 
-    # 重启 fractald 服务
-    echo "重启 fractald 服务..."
-    sudo systemctl restart fractald
-    
     # 启动并使服务在启动时自动启动
-    echo "启用并启动 fractald 服务..."
-    sudo systemctl enable fractald
+    echo "启动 fractald 服务并设置为开机自启..."
     sudo systemctl start fractald
+    sudo systemctl enable fractald
 
-    echo "脚本更新完成。"
-
+    echo "安装节点完成。"
+    
     # 提示用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
 }
