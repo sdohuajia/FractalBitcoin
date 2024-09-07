@@ -9,7 +9,7 @@ function main_menu() {
         clear
         echo "脚本由推特 @ferdie_jhovie，免费开源，请勿相信收费"
         echo "================================================================"
-        echo "节点社区 Telegram 群组: https://t.me/niuwuriji"
+        echo "节点社区 Telegram 羾组: https://t.me/niuwuriji"
         echo "节点社区 Telegram 频道: https://t.me/niuwuriji"
         echo "节点社区 Discord 社群: https://discord.gg/GbMV5EcNWF"
         echo "退出脚本，请按键盘ctrl c退出即可"
@@ -19,8 +19,9 @@ function main_menu() {
         echo "3) 创建钱包"
         echo "4) 查看私钥"
         echo "5) 更新脚本（旧0.1.8更新）"
-        echo "6) 退出"
-        echo -n "请输入选项 [1-6]: "
+        echo "6) 备份钱包"
+        echo "7) 退出"
+        echo -n "请输入选项 [1-7]: "
         read choice
         case $choice in
             1) install_node ;;
@@ -28,7 +29,8 @@ function main_menu() {
             3) create_wallet ;;
             4) view_private_key ;;
             5) update_script ;;
-            6) exit 0 ;;
+            6) backup_wallet ;;
+            7) exit 0 ;;
             *) echo "无效选项，请重新选择。" ;;
         esac
     done
@@ -198,6 +200,16 @@ EOF
     
     # 提示用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
+}
+
+# 备份钱包函数
+function backup_wallet() {
+    echo "开始备份钱包..."
+
+    # 备份钱包目录
+    sudo cp -r /root/.bitcoin/wallets/wallet /root/wallet-backup
+
+    echo "钱包备份完成。备份文件保存在 /root/wallet-backup"
 }
 
 # 启动主菜单
