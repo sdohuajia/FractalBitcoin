@@ -146,6 +146,10 @@ function update_script() {
     echo "备份 .bitcoin 目录..."
     sudo cp -r /root/.bitcoin /root/bitcoin-backup
 
+    # 备份旧版本的 data 目录
+    echo "备份旧版本的 data 目录..."
+    sudo cp -r /root/fractald-0.1.8-x86_64-linux-gnu/data /root/fractald-0.1.8-x86_64-linux-gnu/data-backup
+
     # 删除旧版本 fractald 目录
     echo "删除旧版本 fractald 目录..."
     sudo rm -rf /root/fractald-0.1.8-x86_64-linux-gnu
@@ -165,6 +169,10 @@ function update_script() {
     # 恢复备份的 .bitcoin 文件夹
     echo "恢复备份的 .bitcoin 文件夹..."
     sudo cp -r /root/bitcoin-backup /root/.bitcoin
+
+    # 恢复旧版本的 data 目录
+    echo "恢复旧版本的 data 目录..."
+    sudo cp -r /root/fractald-0.1.8-x86_64-linux-gnu/data-backup /root/fractald-0.2.0-x86_64-linux-gnu/data
 
     # 更新 systemd 服务文件（如果有变化）
     echo "更新 systemd 服务文件..."
