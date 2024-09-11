@@ -14,7 +14,7 @@ function main_menu() {
         echo "节点社区 Discord 社群: https://discord.gg/GbMV5EcNWF"
         echo "退出脚本，请按键盘ctrl c退出即可"
         echo "请选择要执行的操作:"
-        echo "1) 安装节点（0.2.0版本）"
+        echo "1) 安装节点（0.2.1版本）"
         echo "2) 查看服务日志"
         echo "3) 创建钱包"
         echo "4) 查看私钥"
@@ -53,15 +53,15 @@ function install_node() {
 
     # 下载 fractald 库
     echo "下载 fractald 库..."
-    wget https://github.com/fractal-bitcoin/fractald-release/releases/download/v0.2.0/fractald-0.2.0-x86_64-linux-gnu.tar.gz
+    wget https://github.com/fractal-bitcoin/fractald-release/releases/download/v0.2.1/fractald-0.2.1-x86_64-linux-gnu.tar.gz
 
     # 提取 fractald 库
     echo "提取 fractald 库..."
-    tar -zxvf fractald-0.2.0-x86_64-linux-gnu.tar.gz
+    tar -zxvf fractald-0.2.1-x86_64-linux-gnu.tar.gz
 
     # 进入 fractald 目录
     echo "进入 fractald 目录..."
-    cd fractald-0.2.0-x86_64-linux-gnu
+    cd fractald-0.2.1-x86_64-linux-gnu
 
     # 创建 data 目录
     echo "创建 data 目录..."
@@ -80,8 +80,8 @@ After=network.target
 
 [Service]
 User=root
-WorkingDirectory=/root/fractald-0.2.0-x86_64-linux-gnu
-ExecStart=/root/fractald-0.2.0-x86_64-linux-gnu/bin/bitcoind -datadir=/root/fractald-0.2.0-x86_64-linux-gnu/data/ -maxtipage=504576000
+WorkingDirectory=/root/fractald-0.2.1-x86_64-linux-gnu
+ExecStart=/root/fractald-0.2.1-x86_64-linux-gnu/bin/bitcoind -datadir=/root/fractald-0.2.1-x86_64-linux-gnu/data/ -maxtipage=504576000
 Restart=always
 RestartSec=3
 LimitNOFILE=infinity
@@ -117,7 +117,7 @@ function view_logs() {
 # 创建钱包函数
 function create_wallet() {
     echo "创建钱包..."
-    cd /root/fractald-0.2.0-x86_64-linux-gnu/bin && ./bitcoin-wallet -wallet=wallet -legacy create
+    cd /root/fractald-0.2.1-x86_64-linux-gnu/bin && ./bitcoin-wallet -wallet=wallet -legacy create
     
     # 提示用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
@@ -128,7 +128,7 @@ function view_private_key() {
     echo "正在查看私钥..."
     
     # 进入 fractald 目录
-    cd /root/fractald-0.2.0-x86_64-linux-gnu/bin
+    cd /root/fractald-0.2.1-x86_64-linux-gnu/bin
     
     # 使用 bitcoin-wallet 导出私钥
     ./bitcoin-wallet -wallet=/root/.bitcoin/wallets/wallet/wallet.dat -dumpfile=/root/.bitcoin/wallets/wallet/MyPK.dat dump
@@ -146,19 +146,19 @@ function update_script() {
 
     # 删除旧版本 fractald 目录
     echo "删除旧版本 fractald 目录..."
-    sudo rm -rf /root/fractald-0.1.8-x86_64-linux-gnu
+    sudo rm -rf /root/fractald-0.2.0-x86_64-linux-gnu
 
     # 下载 fractald 库
     echo "下载 fractald 库..."
-    wget https://github.com/fractal-bitcoin/fractald-release/releases/download/v0.2.0/fractald-0.2.0-x86_64-linux-gnu.tar.gz
+    wget https://github.com/fractal-bitcoin/fractald-release/releases/download/v0.2.1/fractald-0.2.1-x86_64-linux-gnu.tar.gz
 
     # 提取 fractald 库
     echo "提取 fractald 库..."
-    tar -zxvf fractald-0.2.0-x86_64-linux-gnu.tar.gz
+    tar -zxvf fractald-0.2.1-x86_64-linux-gnu.tar.gz
 
     # 进入 fractald 目录
     echo "进入 fractald 目录..."
-    cd fractald-0.2.0-x86_64-linux-gnu
+    cd fractald-0.2.1-x86_64-linux-gnu
 
     # 创建 data 目录
     echo "创建 data 目录..."
@@ -177,8 +177,8 @@ After=network.target
 
 [Service]
 User=root
-WorkingDirectory=/root/fractald-0.2.0-x86_64-linux-gnu
-ExecStart=/root/fractald-0.2.0-x86_64-linux-gnu/bin/bitcoind -datadir=/root/fractald-0.2.0-x86_64-linux-gnu/data/ -maxtipage=504576000
+WorkingDirectory=/root/fractald-0.2.1-x86_64-linux-gnu
+ExecStart=/root/fractald-0.2.1-x86_64-linux-gnu/bin/bitcoind -datadir=/root/fractald-0.2.1-x86_64-linux-gnu/data/ -maxtipage=504576000
 Restart=always
 RestartSec=3
 LimitNOFILE=infinity
